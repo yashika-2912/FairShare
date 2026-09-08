@@ -150,6 +150,11 @@ UPROGS=\
 	$U/_forphan\
 	$U/_dorphan\
 	$U/_sync\
+	$U/_cpubound\
+	$U/_iobound\
+	$U/_mixed\
+	$U/_starvation\
+	$U/_edgecases\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
