@@ -17,7 +17,7 @@ struct spinlock pid_lock;
 
 // #define FAIRSHARE_DEBUG
 #ifdef FAIRSHARE_DEBUG
-#define FS_DEBUG(...) printf(__VA_ARGS__)
+#define FS_DEBUG(...) printk(__VA_ARGS__)
 #else
 #define FS_DEBUG(...)
 #endif
@@ -57,6 +57,27 @@ fs_update_class(struct proc *p)
   if (p->wclass != old_class)
     FS_DEBUG("fairshare: pid %d cpu %d sleep %d class %d\n", p->pid,
              p->cpu_ticks, p->sleep_ticks, p->wclass);
+}
+
+// Update Phase 3 waiting time and scheduling priority. The caller must hold
+// p->lock. last_ran_tick is set immediately before a process is dispatched,
+// so the elapsed global ticks are its time spent waiting to run again.
+static void
+fs_update_priority(struct proc *p)
+{
+  int waited = ticks - p->last_ran_tick;
+  int class_bonus = p->wclass == IO_BOUND ? IO_BONUS : 0;
+
+  // ticks is an int and can eventually wrap. Do not turn that into a
+  // negative waiting time (or an invalid priority boost).
+  if (waited < 0)
+    waited = 0;
+  p->wait_ticks = waited;
+
+  p->priority = p->pred_burst - class_bonus -
+                AGE_WEIGHT * (p->wait_ticks / AGE_INTERVAL);
+  if (p->wait_ticks >= AGE_CAP)
+    p->priority = 0;
 }
 
 extern void forkret(void);
@@ -481,7 +502,6 @@ kwait(uint64 addr)
 void
 scheduler(void)
 {
-  struct proc *p;
   struct cpu *c = mycpu();
 
   c->proc = 0;
@@ -494,33 +514,60 @@ scheduler(void)
     intr_on();
     intr_off();
 
-    int found = 0;
+    struct proc *p;
+    struct proc *selected = 0;
+    int best_priority = 0;
+
+    // Inspect every runnable process. Release each candidate's lock before
+    // inspecting the next one; only the selected process's lock is held
+    // across swtch(), as required by the xv6 scheduler convention.
     for (p = proc; p < &proc[NPROC]; p++) {
       acquire(&p->lock);
       if (p->state == RUNNABLE) {
-        // Switch to chosen process.  It is the process's job
-        // to release its lock and then reacquire it
-        // before jumping back to us.
-        if (p->burst_start == 0)
-          p->burst_start = ticks;
-        p->state = RUNNING;
-        c->proc = p;
-        swtch(&c->context, &p->context);
-
-        // Don't re-enable interrupts on release.
-        mycpu()->intena = 0;
-
-        // Process is done running for now.
-        // It should have changed its p->state before coming back.
-        c->proc = 0;
-        found = 1;
+        fs_update_priority(p);
+        FS_DEBUG("fairshare: runnable pid %d wait %d priority %d\n",
+                 p->pid, p->wait_ticks, p->priority);
+        // Strictly lower preserves existing process-table order on ties.
+        if (selected == 0 || p->priority < best_priority) {
+          selected = p;
+          best_priority = p->priority;
+        }
       }
       release(&p->lock);
     }
-    if (found == 0) {
+
+    if (selected == 0) {
       // nothing to run; stop running on this core until an interrupt.
       asm volatile("wfi");
+      continue;
     }
+
+    // Another CPU can have dispatched the candidate after the scan. Recheck
+    // while holding its lock; the next scheduler iteration will rescan if it
+    // is no longer runnable.
+    acquire(&selected->lock);
+    if (selected->state != RUNNABLE) {
+      release(&selected->lock);
+      continue;
+    }
+
+    FS_DEBUG("fairshare: selected pid %d priority %d\n", selected->pid,
+             selected->priority);
+    // Switch to the one chosen process. It releases this lock after entering
+    // the process and reacquires it before switching back to us.
+    if (selected->burst_start == 0)
+      selected->burst_start = ticks;
+    selected->last_ran_tick = ticks;
+    selected->state = RUNNING;
+    c->proc = selected;
+    swtch(&c->context, &selected->context);
+
+    // Don't re-enable interrupts on release.
+    mycpu()->intena = 0;
+
+    // Process is done running for now. It changed state before coming back.
+    c->proc = 0;
+    release(&selected->lock);
   }
 }
 
