@@ -15,6 +15,50 @@ struct proc *initproc;
 int nextpid = 1;
 struct spinlock pid_lock;
 
+// #define FAIRSHARE_DEBUG
+#ifdef FAIRSHARE_DEBUG
+#define FS_DEBUG(...) printf(__VA_ARGS__)
+#else
+#define FS_DEBUG(...)
+#endif
+
+// The caller must hold p->lock.
+static int
+fs_ema(int actual_burst, int predicted_burst)
+{
+  return (ALPHA * actual_burst + (SCALE - ALPHA) * predicted_burst) / SCALE;
+}
+
+// The caller must hold p->lock. ticks is read without tickslock here because
+// fs_tick_update() holds tickslock while acquiring p->lock; acquiring it in
+// this direction would invert the established tickslock -> p->lock order.
+static void
+fs_finish_burst(struct proc *p)
+{
+  int actual_burst = ticks - p->burst_start;
+
+  p->pred_burst = fs_ema(actual_burst, p->pred_burst);
+  p->burst_start = 0;
+  FS_DEBUG("fairshare: pid %d actual %d pred %d cpu %d sleep %d class %d\n",
+           p->pid, actual_burst, p->pred_burst, p->cpu_ticks,
+           p->sleep_ticks, p->wclass);
+}
+
+// Recompute the workload class after a cumulative CPU/sleep accounting
+// update. The caller must hold p->lock.
+static void
+fs_update_class(struct proc *p)
+{
+  int old_class = p->wclass;
+  int io_ratio = (p->sleep_ticks * 100) /
+                 (p->cpu_ticks + p->sleep_ticks + 1);
+
+  p->wclass = io_ratio >= IO_THRESHOLD ? IO_BOUND : CPU_BOUND;
+  if (p->wclass != old_class)
+    FS_DEBUG("fairshare: pid %d cpu %d sleep %d class %d\n", p->pid,
+             p->cpu_ticks, p->sleep_ticks, p->wclass);
+}
+
 extern void forkret(void);
 static void freeproc(struct proc *p);
 
@@ -124,6 +168,14 @@ allocproc(void)
 found:
   p->pid = allocpid();
   p->state = USED;
+  p->pred_burst = PRED_BURST_SEED;
+  p->burst_start = 0;
+  p->cpu_ticks = 0;
+  p->sleep_ticks = 0;
+  p->wclass = CPU_BOUND;
+  p->last_ran_tick = 0;
+  p->wait_ticks = 0;
+  p->priority = 0;
 
   // Allocate a trapframe page.
   if ((p->trapframe = (struct trapframe *)kalloc()) == 0) {
@@ -355,6 +407,7 @@ kexit(int status)
   acquire(&p->lock);
 
   p->xstate = status;
+  fs_finish_burst(p);
   p->state = ZOMBIE;
 
   release(&wait_lock);
@@ -448,6 +501,8 @@ scheduler(void)
         // Switch to chosen process.  It is the process's job
         // to release its lock and then reacquire it
         // before jumping back to us.
+        if (p->burst_start == 0)
+          p->burst_start = ticks;
         p->state = RUNNING;
         c->proc = p;
         swtch(&c->context, &p->context);
@@ -505,6 +560,29 @@ yield(void)
   p->state = RUNNABLE;
   sched();
   release(&p->lock);
+}
+
+// Called once for every global xv6 tick, while tickslock is held by CPU 0.
+// That lock is acquired before p->lock elsewhere in the tick path too
+// (wakeup(&ticks)), so this pass keeps the same order and locks only one
+// process at a time. A state transition cannot be missed or double-counted:
+// it must acquire the same p->lock, and only CPU 0 advances global ticks.
+void
+fs_tick_update(void)
+{
+  struct proc *p;
+
+  for (p = proc; p < &proc[NPROC]; p++) {
+    acquire(&p->lock);
+    if (p->state == RUNNING) {
+      p->cpu_ticks++;
+      fs_update_class(p);
+    } else if (p->state == SLEEPING) {
+      p->sleep_ticks++;
+      fs_update_class(p);
+    }
+    release(&p->lock);
+  }
 }
 
 // A fork child's very first scheduling by scheduler()
@@ -566,6 +644,7 @@ sleep(void)
 
   acquire(&p->lock);
   if (p->chan != 0) {
+    fs_finish_burst(p);
     p->state = SLEEPING;
     sched();
   }

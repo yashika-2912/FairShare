@@ -169,6 +169,7 @@ clockintr()
   if (cpuid() == 0) {
     acquire(&tickslock);
     ticks++;
+    fs_tick_update();
     wakeup(&ticks);
     release(&tickslock);
   }

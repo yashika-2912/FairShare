@@ -78,6 +78,17 @@ struct trapframe {
 
 enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
+#define ALPHA 50
+#define SCALE 100
+#define PRED_BURST_SEED 10
+#define IO_BONUS 5
+#define IO_THRESHOLD 60
+#define AGE_WEIGHT 1
+#define AGE_INTERVAL 10
+#define AGE_CAP 500
+
+enum workload_class { CPU_BOUND, IO_BOUND };
+
 // Per-process state
 struct proc {
   struct spinlock lock;
@@ -88,6 +99,14 @@ struct proc {
   int killed;           // If non-zero, have been killed
   int xstate;           // Exit status to be returned to parent's wait
   int pid;              // Process ID
+  int pred_burst;       // EMA prediction of the next CPU burst, in ticks
+  int burst_start;      // Global tick at the start of the current burst
+  int cpu_ticks;        // Cumulative ticks observed in RUNNING
+  int sleep_ticks;      // Cumulative ticks observed in SLEEPING
+  int wclass;           // CPU_BOUND or IO_BOUND
+  int last_ran_tick;    // Reserved for later scheduling metrics
+  int wait_ticks;       // Reserved for Phase 3 aging
+  int priority;         // Reserved for Phase 3 scheduling
 
   // wait_lock must be held when using this:
   struct proc *parent; // Parent process
