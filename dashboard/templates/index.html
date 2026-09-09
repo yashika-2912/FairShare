@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FairShare Phase 5 Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">xv6 scheduler evaluation</p>
+        <h1>FairShare performance dashboard</h1>
+        <p>Existing Phase 5 CSV results, averaged by workload and scheduler.</p>
+      </header>
+      <p id="status" role="status">Loading experiment results…</p>
+      <section id="charts" aria-label="Scheduler comparison charts"></section>
+    </main>
+    <script>
+      const colors = { vanilla: '#718096', fairshare: '#1f8a70' };
+      const names = { vanilla: 'Vanilla xv6', fairshare: 'FairShare' };
+
+      async function renderDashboard() {
+        const response = await fetch('/api/results');
+        if (!response.ok) throw new Error('Could not load experiment CSV data.');
+        const { metrics } = await response.json();
+        const charts = document.getElementById('charts');
+        metrics.forEach((metric) => {
+          const card = document.createElement('article');
+          card.className = 'chart-card';
+          card.innerHTML = `<h2>${metric.label}</h2><canvas aria-label="${metric.label} comparison" role="img"></canvas>`;
+          charts.appendChild(card);
+          new Chart(card.querySelector('canvas'), {
+            type: 'bar',
+            data: {
+              labels: metric.workloads,
+              datasets: ['vanilla', 'fairshare'].map((scheduler) => ({
+                label: names[scheduler], data: metric.series[scheduler], backgroundColor: colors[scheduler], borderRadius: 4,
+              })),
+            },
+            options: {
+              responsive: true, maintainAspectRatio: false,
+              plugins: { legend: { position: 'top' } },
+              scales: { y: { beginAtZero: true, title: { display: true, text: metric.unit } } },
+            },
+          });
+        });
+        document.getElementById('status').textContent = 'Source: experiments/results.csv and experiments/fairness.csv';
+      }
+
+      renderDashboard().catch((error) => {
+        document.getElementById('status').textContent = error.message;
+        document.getElementById('status').className = 'error';
+      });
+    </script>
+  </body>
+</html>
