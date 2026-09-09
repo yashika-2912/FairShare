@@ -1,0 +1,101 @@
+
+xv6 kernel is booting
+
+init: starting sh
+$ starvation
+starvation: hog 4 with short-job churn
+FSSTAT workload=starvation pid=5 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=6 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=7 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=8 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=9 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=10 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=11 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=12 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=13 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=14 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=15 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=16 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=17 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=18 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=19 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=20 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=21 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=22 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=23 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=24 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=25 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=26 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=27 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=28 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=29 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=30 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=31 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=32 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=33 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=34 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=35 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=36 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=37 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=38 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=39 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=40 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=41 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=42 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=43 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=44 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=45 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=46 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=47 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=48 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=4 cpu_ticks=11 wait_ticks=0 response_ticks=0 turnaround_ticks=11 context_switches=12
+FSSTAT workload=starvation pid=49 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=50 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=52 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=53 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=54 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=55 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=51 cpu_ticks=1 wait_ticks=0 response_ticks=0 turnaround_ticks=1 context_switches=2
+FSSTAT workload=starvation pid=57 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=58 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=59 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=60 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=61 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=62 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=63 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=64 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=56 cpu_ticks=2 wait_ticks=0 response_ticks=0 turnaround_ticks=2 context_switches=3
+FSSTAT workload=starvation pid=65 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=66 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=67 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=69 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=70 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=71 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=72 cpu_ticks=0 wait_ticks=1 response_ticks=1 turnaround_ticks=1 context_switches=1
+FSSTAT workload=starvation pid=73 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=74 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=75 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=68 cpu_ticks=2 wait_ticks=0 response_ticks=0 turnaround_ticks=2 context_switches=3
+FSSTAT workload=starvation pid=77 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=78 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=79 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=80 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=81 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=82 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=83 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=0 context_switches=1
+FSSTAT workload=starvation pid=76 cpu_ticks=2 wait_ticks=1 response_ticks=0 turnaround_ticks=3 context_switches=3
+starvation: hog chunk 4 tick 10 gap 2
+starvation: hog chunk 8 tick 14 gap 4
+starvation: hog chunk 12 tick 15 gap 1
+starvation: hog chunk 16 tick 15 gap 0
+starvation: hog chFSSTAT workload=starvation pid=84 cpu_ticks=1 wait_ticks=1 response_ticks=0 turnaround_ticks=2 context_switches=2
+unk 20 tick 16 gap 1
+starvation: hog chunk 24 tick 16 gap 0
+starvation: hog chunk 28 tick 17 gap 1
+starvation: hog chunk 32 tick 17 gap 0
+starvation: hog chunk 36 tick 18 gap 1
+starvation: hog chunk 40 tick 19 gap 1
+starvation: hog failed
+FSSTAT workload=starvation pid=3 cpu_ticks=2 wait_ticks=9 response_ticks=0 turnaround_ticks=22 context_switches=29
+$ QEMU: Terminated
+

@@ -1,0 +1,14 @@
+
+xv6 kernel is booting
+
+init: starting sh
+$ iobound
+iobound: start tick 8
+iobound: iteration 5 tick 23
+iobound: iteration 10 tick 38
+iobound: iteration 15 tick 53
+iobound: iteration 20 tick 68
+iobound: done tick 68 checksum 40260DE60FD9C107
+FSSTAT workload=iobound pid=3 cpu_ticks=0 wait_ticks=0 response_ticks=0 turnaround_ticks=60 context_switches=66
+QEMU: Terminated
+

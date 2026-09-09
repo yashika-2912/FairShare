@@ -1,0 +1,26 @@
+
+xv6 kernel is booting
+
+init: starting sh
+$ mixed
+mixed: start tick 8
+mixed: iteration 1 phase cpu tick 10
+mixed: iteration 2 phase cpu tick 11
+mixed: iteration 3 phase cpu tick 12
+mixed: iteration 4 phase cpu tick 13
+mixed: iteration 5 phase cpu tick 14
+mixed: iteration 6 phase cpu tick 15
+mixed: iteration 7 phase cpu tick 16
+mixed: iteration 8 phase cpu tick 17
+mixed: iteration 9 phase io tick 21
+mixed: iteration 10 phase io tick 25
+mixed: iteration 11 phase io tick 29
+mixed: iteration 12 phase io tick 33
+mixed: iteration 13 phase io tick 37
+mixed: iteration 14 phase io tick 41
+mixed: iteration 15 phase io tick 45
+mixed: iteration 16 phase io tick 49
+mixed: done tick 49 checksum A394D393DCC7D10B
+FSSTAT workload=mixed pid=3 cpu_ticks=1 wait_ticks=0 response_ticks=0 turnaround_ticks=41 context_switches=47
+$ QEMU: Terminated
+

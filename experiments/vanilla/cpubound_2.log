@@ -1,0 +1,14 @@
+
+xv6 kernel is booting
+
+init: starting sh
+$ cpubound
+cpubound: start tick 8
+cpubound: chunk 6 tick 9
+cpubound: chunk 12 tick 10
+cpubound: chunk 18 tick 10
+cpubound: chunk 24 tick 10
+cpubound: done tick 11 checksum 207650C1B8693701
+FSSTAT workload=cpubound pid=3 cpu_ticks=3 wait_ticks=0 response_ticks=0 turnaround_ticks=3 context_switches=9
+$ QEMU: Terminated
+
