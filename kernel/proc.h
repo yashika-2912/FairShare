@@ -108,6 +108,13 @@ struct proc {
   int wait_ticks;       // Reserved for Phase 3 aging
   int priority;         // Reserved for Phase 3 scheduling
 
+  // Phase 5 measurement fields. These are never read by scheduler policy.
+  int eval_creation_tick;
+  int eval_first_run_tick;
+  int eval_cpu_ticks;
+  int eval_wait_ticks;
+  int eval_context_switches;
+
   // wait_lock must be held when using this:
   struct proc *parent; // Parent process
 

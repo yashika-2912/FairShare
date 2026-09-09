@@ -83,6 +83,13 @@ fs_update_priority(struct proc *p)
 extern void forkret(void);
 static void freeproc(struct proc *p);
 
+static int
+eval_workload(struct proc *p)
+{
+  return strncmp(p->name, "cpubound", 16) == 0 || strncmp(p->name, "iobound", 16) == 0 ||
+         strncmp(p->name, "mixed", 16) == 0 || strncmp(p->name, "starvation", 16) == 0;
+}
+
 extern char trampoline[]; // trampoline.S
 
 // helps ensure that wakeups of wait()ing
@@ -197,6 +204,11 @@ found:
   p->last_ran_tick = 0;
   p->wait_ticks = 0;
   p->priority = 0;
+  p->eval_creation_tick = ticks;
+  p->eval_first_run_tick = -1;
+  p->eval_cpu_ticks = 0;
+  p->eval_wait_ticks = 0;
+  p->eval_context_switches = 0;
 
   // Allocate a trapframe page.
   if ((p->trapframe = (struct trapframe *)kalloc()) == 0) {
@@ -428,6 +440,13 @@ kexit(int status)
   acquire(&p->lock);
 
   p->xstate = status;
+  if (eval_workload(p)) {
+    int response = p->eval_first_run_tick < 0 ? -1 :
+                   p->eval_first_run_tick - p->eval_creation_tick;
+    printk("FSSTAT workload=%s pid=%d cpu_ticks=%d wait_ticks=%d response_ticks=%d turnaround_ticks=%d context_switches=%d\n",
+           p->name, p->pid, p->eval_cpu_ticks, p->eval_wait_ticks, response,
+           ticks - p->eval_creation_tick, p->eval_context_switches);
+  }
   fs_finish_burst(p);
   p->state = ZOMBIE;
 
@@ -557,6 +576,9 @@ scheduler(void)
     // the process and reacquires it before switching back to us.
     if (selected->burst_start == 0)
       selected->burst_start = ticks;
+    if (selected->eval_first_run_tick < 0)
+      selected->eval_first_run_tick = ticks;
+    selected->eval_context_switches++;
     selected->last_ran_tick = ticks;
     selected->state = RUNNING;
     c->proc = selected;
@@ -623,7 +645,10 @@ fs_tick_update(void)
     acquire(&p->lock);
     if (p->state == RUNNING) {
       p->cpu_ticks++;
+      p->eval_cpu_ticks++;
       fs_update_class(p);
+    } else if (p->state == RUNNABLE) {
+      p->eval_wait_ticks++;
     } else if (p->state == SLEEPING) {
       p->sleep_ticks++;
       fs_update_class(p);
